@@ -66,7 +66,8 @@ class Stimulator:
                 # get new sample from LSL stream
                 sample, timestamp = self.inlet.pull_sample()
 
-                # simple moving average filter of emg signal
+                # simple moving average filter of rectified emg signal
+                # value has unit micro volt
                 new_emg_value = sample[0]
                 new_emg_value = abs(new_emg_value)
                 new_emg_value = 0.8 * last_emg_value + 0.2 * new_emg_value
@@ -89,16 +90,17 @@ class Stimulator:
             connection.close()
 
 
-    async def update(self, mid_level: sm4.LayerMidLevel, emg_value: float):
+    async def update(self, mid_level: sm4.LayerMidLevel, emg_value_in_micro_volt: float):
         """Update active stimulation channels based on emg value"""
 
         active_muscles: set[Muscles] = []
         # use static threshold to activate stimulation
-        if emg_value >= 0.024:
+        if emg_value_in_micro_volt >= 75.0:
             active_muscles = [Muscles.FLEXOR_DIGITORUM] 
 
         # update stimulation only if muscles have changed
         if active_muscles != self.last_active_muscles:
+            print(f"Stimulation {"enabled" if len(active_muscles) > 0 else "disabled"}")
             self.last_active_muscles = active_muscles
 
             cc = [None] * 8

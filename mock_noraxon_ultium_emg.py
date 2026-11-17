@@ -21,7 +21,7 @@ async def main():
     try:
         # create LSL stream
         info = StreamInfo(
-            name="Forearm",
+            name="EMG device",
             type="EMG",
             channel_count=1,
             nominal_srate=args.sample_rate,
@@ -53,7 +53,8 @@ async def main():
                 for row in csv_reader:
                     emg_value = float(row['emg_raw_mV'])
 
-                    outlet.push_sample([emg_value])
+                    # convert to micro volt                    
+                    outlet.push_sample([emg_value * 1000])
                     await asyncio.sleep(1.0 / args.sample_rate)
 
     except asyncio.CancelledError:
