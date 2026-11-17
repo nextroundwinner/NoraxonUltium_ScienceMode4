@@ -6,22 +6,21 @@ Provides an example how to use Noraxon Ultium EMG sensor (https://www.noraxon.co
 
 This example uses data from a Noraxon Ultium EMG sensor to adjust stimulation parameters of P24. Communication between these two devices uses Lab Streaming Layer (LSL).
 
-For P24 device:
+## Setup
 
-- Connect to device
-- Initialize mid level mode
-- Update stimulation parameters according current emg value
-- Stop stimulation
-- Disconnect
-
-This examples expects EMG data of an intend of movement from the hand.
-
-## Hints
-
-- Example
+- myoRESEARCH 4
+  - Enable HTTP streaming
+  - Start measurement with EMG device
+- Noraxon-LSL (https://github.com/Noraxon/Noraxon-LSL)
+  - Connect to HTTP streaming server from MR4
+  - Ensure that data from MR4 contain timestamp information
+- Run example
   - Reads EMG data from LSL stream and changes stimulation
   - Run `python .\example.py`
   - Adjust command line parameter for P24 com port
+
+
+## Setup (Mock)
 - Example data from file
   - Reads EMG data from a file and send it via LSL stream
   - Can be used if no physical device is available
